@@ -15,11 +15,11 @@ def paginate_questions(request):
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
 
-    qestions = Question.query.order_by(Question.id).all()
-    q_list = [q.fomat() for q in questions]
+    questions = Question.query.order_by(Question.id).all()
+    q_list = [q.format() for q in questions]
     current_questions = None
 
-    if len(questions >= 10):
+    if len(questions) >= 10:
         current_questions = q_list[start:end]
     else:
         current_questions = q_list
@@ -80,7 +80,33 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions.
     '''
 
-    
+    @app.route('/questions')
+    def get_questions():
+
+        abort_code, questions, categories = None, None, None
+
+        try:
+            questions = paginate_questions(request)
+            categories = Category.query.order_by(Category.id).all()
+            cat_list = {c.id: c.type for c in categories}
+
+            if len(questions) == 0:
+                abort_code = 404
+                raise Exception('not found')
+
+        except:
+            print(sys.exc_info())
+            if abort_code == 404:
+                abort(404)
+            abort(422)
+
+        return jsonify({
+        'success': True,
+        'questions': questions,
+        'total_questions': len(questions),
+        'categories': cat_list,
+        'current_category': None
+        })
 
     '''
     @TODO:
