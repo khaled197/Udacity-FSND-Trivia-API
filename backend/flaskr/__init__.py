@@ -9,20 +9,14 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
-def paginate_questions(request):
+def paginate_questions(request, selection):
 
     page = request.args.get('page', 1, type = int)
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
 
-    questions = Question.query.order_by(Question.id).all()
-    q_list = [q.format() for q in questions]
-    current_questions = None
-
-    if len(questions) >= 10:
-        current_questions = q_list[start:end]
-    else:
-        current_questions = q_list
+    q_list = [q.format() for q in selection]
+    current_questions = q_list[start:end]
 
     return current_questions
 
@@ -83,10 +77,11 @@ def create_app(test_config=None):
     @app.route('/questions')
     def get_questions():
 
-        abort_code, questions, categories = None, None, None
+        abort_code, questions, categories, selection = None, None, None, None
 
         try:
-            questions = paginate_questions(request)
+            selection = Question.query.order_by(Question.id).all()
+            questions = paginate_questions(request, selection)
             categories = Category.query.order_by(Category.id).all()
             cat_list = {c.id: c.type for c in categories}
 
@@ -103,7 +98,7 @@ def create_app(test_config=None):
         return jsonify({
         'success': True,
         'questions': questions,
-        'total_questions': len(questions),
+        'total_questions': len(selection),
         'categories': cat_list,
         'current_category': None
         })
