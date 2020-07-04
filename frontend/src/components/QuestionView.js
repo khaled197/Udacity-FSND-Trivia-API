@@ -148,6 +148,7 @@ class QuestionView extends Component {
               answer={q.answer}
               category={this.state.categories[q.category]}
               difficulty={q.difficulty}
+              raing={q.rating}
               questionAction={this.questionAction(q.id)}
             />
           ))}

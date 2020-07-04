@@ -72,9 +72,14 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions'
+GET '/categories/<int:cat_id>/questions'
+GET '/quizzes'
+POST '/questions'
+POST '/questions/search'
+DELETE '/questions'
+
+
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -86,6 +91,148 @@ GET '/categories'
 '4' : "History",
 '5' : "Entertainment",
 '6' : "Sports"}
+
+GET '/questions'
+- Fetches a dictionary of questions paginated in groups of 10
+- Request Arguments: None
+- Returns: An object with multiple keys which are categories, current_category, questions, success key, and the total_questions.
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?", 
+      "rating": 3
+    }, 
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled I Know Why the Caged Bird Sings?", 
+      "rating": 5
+    }
+  ], 
+  "success": true, 
+  "total_questions": 2 
+}
+
+GET '/categories/<int:cat_id>/questions'
+- Fetches a dictionary of questions associated to a specific category, paginated in groups of 10
+- Request Arguments: None
+- Returns: An object with multiple keys which are current_category, questions, success, and the total_questions.
+{
+  "current_category": 3, 
+  "questions": [
+    {
+      "answer": "Lake Victoria", 
+      "category": 3, 
+      "difficulty": 2, 
+      "id": 13, 
+      "question": "What is the largest lake in Africa?", 
+      "rating": 3
+    }, 
+    {
+      "answer": "The Palace of Versailles", 
+      "category": 3, 
+      "difficulty": 3, 
+      "id": 14, 
+      "question": "In which royal palace would you find the Hall of Mirrors?", 
+      "rating": 2
+    }, 
+    {
+      "answer": "Agra", 
+      "category": 3, 
+      "difficulty": 2, 
+      "id": 15, 
+      "question": "The Taj Mahal is located in which Indian city?", 
+      "rating": 1
+    }
+  ], 
+  "success": true, 
+  "total_questions": 3
+}
+
+GET '/quizzes'
+- Fetches a dictionary that includes a new question
+- Request Arguments: None
+- Returns: An object with two keys which are question, and success keys.
+{
+  "question": {
+    "answer": "The Liver", 
+    "category": 1, 
+    "difficulty": 4, 
+    "id": 20, 
+    "question": "What is the heaviest organ in the human body?", 
+    "rating": 4
+  }, 
+  "success": true
+}
+
+POST '/questions'
+- Creates a new question in the database
+- Request Arguments: None
+- Returns: An object with two keys which are question_id, and success keys.
+{
+  "question_id": 26, 
+  "success": true
+}
+
+POST '/questions/search'
+- Fetches a dictionary that contains the list of questions based on a search term
+- Request Arguments: None
+- Returns: An object with multiple keys which are current_category, questions list, success key and total_questions
+{
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled I Know Why the Caged Bird Sings?", 
+      "rating": 5
+    }, 
+    {
+      "answer": "George Washington Carver", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 12, 
+      "question": "Who invented Peanut Butter?", 
+      "rating": 2
+    }, 
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?", 
+      "rating": 2
+    }
+  ], 
+  "success": true, 
+  "total_questions": 3
+}
+
+DELETE '/questions/<int:question_id>'
+- Deletes the question with id: question_id
+- Request Arguments: None
+- Returns: An object with multiple keys which are the id of the deleted question and success key
+{
+  "deleted_id": 2, 
+  "success": true
+}
 
 ```
 

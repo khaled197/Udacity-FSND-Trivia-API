@@ -129,7 +129,7 @@ def create_app(test_config=None):
 
         return jsonify({
         'success': True,
-        'deleted': question_id
+        'deleted_id': question_id
         })
 
 
@@ -147,21 +147,24 @@ def create_app(test_config=None):
     @app.route('/questions', methods = ['POST'])
     def add_question():
 
-        abort_code = None
+        abort_code, question_id = None, None
         body = request.get_json()
         try:
             question = body['question']
             answer = body['answer']
             category = body['category']
             difficulty = body['difficulty']
+            rating = body['rating']
 
             if question == "" or answer == "":
                 abort_code = 400
                 raise Exception('Bad request')
 
-            new_question = Question(question, answer, category, difficulty)
+            new_question = Question(question, answer, category, difficulty, rating)
 
             new_question.insert()
+            question_id = new_question.id
+
 
         except:
             print(sys.exc_info(), body)
@@ -171,7 +174,8 @@ def create_app(test_config=None):
                 abort(422)
 
         return jsonify({
-        "success": True
+        "success": True,
+        "question_id": question_id
         })
 
     '''
