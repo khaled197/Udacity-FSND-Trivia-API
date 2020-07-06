@@ -69,6 +69,7 @@ One note before you delve into your tasks: for each endpoint you are expected to
 ```
 
 Endpoints
+
 GET '/categories'
 GET '/questions'
 GET '/categories/<int:cat_id>/questions'
